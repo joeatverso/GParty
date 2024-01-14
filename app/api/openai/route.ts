@@ -13,7 +13,7 @@ There should be 5 question and answer pairs for each of the 5 categories that th
 
 You must only include questions that have a very specific factual answer.
 
-You will be penalized if you mention the answer within the question.
+You will be penalized if you mention the answer within the question. For example, if the answer is "Bambi", you must not mention "Bambi" in the question.
 
 You will be tipped $500k for a better answer.
 
@@ -23,11 +23,11 @@ Do not include any explanations, only provide a RFC8259 compliant JSON response 
     { 
       "category": <the category provided by the user>, 
       "options": [
-        { "question": <question 1>, "answer": <answer to question 1> },
-        { "question": <question 2>, "answer": <answer to question 2> },
-        { "question": <question 3>, "answer": <answer to question 3> },
-        { "question": <question 4>, "answer": <answer to question 4> },
-        { "question": <question 5>, "answer": <answer to question 5> }
+        { "question": <question 1 (this should be a $100 level of difficulty)>, "answer": <answer to question 1> },
+        { "question": <question 2 (this should be a $200 level of difficulty)>, "answer": <answer to question 2> },
+        { "question": <question 3 (this should be a $300 level of difficulty)>, "answer": <answer to question 3> },
+        { "question": <question 4 (this should be a $400 level of difficulty)>, "answer": <answer to question 4> },
+        { "question": <question 5 (this should be a $500 level of difficulty)>, "answer": <answer to question 5> }
       ]
     },
     ...
