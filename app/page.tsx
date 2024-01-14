@@ -129,9 +129,14 @@ export default function Home() {
             {grid}
             <div className="flex space-x-4 pt-5">
               {teams.map((team, index) => (
-                <p key={index} className="text-2xl">
-                  {team}: {teamPoints[index]}
-                </p>
+                <div key={index} className="flex space-x-1">
+                  <p key={index} className="text-xl">
+                    {team}:
+                  </p>
+                  <p key={index} className={`text-xl ${teamPoints[index] >= 0 ? "text-green-600" : "text-red-600"}`}>
+                    {teamPoints[index] < 0 && "-"}${Math.abs(teamPoints[index])}
+                  </p>
+                </div>
               ))}
             </div>
           </div>
