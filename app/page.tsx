@@ -67,7 +67,7 @@ export default function Home() {
     const isButtonDisabled = categories.some((category) => category === "");
 
     return (
-      <Card className="p-10 w-2/3 rounded-2xl">
+      <Card className="p-10 lg:w-2/3 rounded-2xl">
         <div className="flex flex-col space-y-2">
           <h1 className="text-2xl mb-2 font-semibold">Categories</h1>
           <Input placeholder="Category 1" defaultValue={categories[0]} onBlur={(event) => setCategory(0, event.target.value)} />
@@ -91,7 +91,7 @@ export default function Home() {
             </div>
           ))}
         </div>
-        <div className="flex justify-between pt-3">
+        <div className="flex md:justify-between pt-3 space-x-2">
           <Button disabled={loadingQuestions} onClick={() => addTeam()}>
             Add Team
           </Button>
@@ -121,7 +121,7 @@ export default function Home() {
   }
 
   return (
-    <main className="h-screen w-screen p-24 bg-slate-100">
+    <main className="h-screen min-w-[1000px] md:w-screen p-24 bg-slate-100">
       {!!questions ? (
         <>
           <CategoryRow options={questions} />
@@ -130,7 +130,7 @@ export default function Home() {
             <div className="flex space-x-4 pt-5">
               {teams.map((team, index) => (
                 <div key={index} className="flex space-x-1">
-                  <p key={index} className="text-xl">
+                  <p key={index} className="text-xl whitespace-nowrap">
                     {team}:
                   </p>
                   <p key={index} className={`text-xl ${teamPoints[index] >= 0 ? "text-green-600" : "text-red-600"}`}>
