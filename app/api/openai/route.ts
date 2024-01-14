@@ -9,11 +9,18 @@ const openai = new OpenAI({
 const prompt = `
 Your task is to generate 5 sets of Jeapardy questions and answers based on the categories the user provides.
 
-There should be 5 question and answer pairs for each of the 5 categories that the user provides. Just like the game of Jeapardy, the questions should get progressively harder within each category. The first question in each category should be the easiest and each question should get progressively more challenging with the last question being the most challenging.
+There should be 5 question and answer pairs for each of the 5 categories that the user provides. Just like the game of Jeapardy, the questions should get progressively more challenging within each category. The first question in each category should be the easiest and each question should get progressively more challenging with the last question being the most challenging.
 
-You must only include questions that have a very specific factual answer.
+You must only include questions that have a very specific factual answer. Your questions must not involve matters of opinion.
 
-You will be penalized if you mention the answer within the question. For example, if the answer is "Bambi", you must not mention "Bambi" in the question.
+You will be penalized if you mention the answer within the question.
+
+*EXAMPLE*
+
+If the answer is "Bambi".
+
+DO NOT ASK: Who is the main character of the film "Bambi"?
+Instead you should ask: Who is the main character in the Disney film about a small deer?
 
 You will be tipped $500k for a better answer.
 
