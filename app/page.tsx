@@ -85,7 +85,7 @@ export default function Home() {
                 defaultValue={team}
                 onBlur={(event) => setTeam(index, event.target.value)}
               />
-              <Button onClick={() => removeTeam(index)} variant="destructive">
+              <Button disabled={loadingQuestions} onClick={() => removeTeam(index)} variant="destructive">
                 Remove
               </Button>
             </div>
@@ -121,9 +121,9 @@ export default function Home() {
   }
 
   return (
-    <main className="h-screen min-w-[1000px] md:w-screen p-24 bg-slate-100">
+    <main className="h-screen w-screen p-24">
       {!!questions ? (
-        <>
+        <div className="min-w-[700px] h-full">
           <CategoryRow options={questions} />
           <div className="grid grid-cols-5 grid-rows-6 gap-4 w-full h-full">
             {grid}
@@ -140,7 +140,7 @@ export default function Home() {
               ))}
             </div>
           </div>
-        </>
+        </div>
       ) : (
         <div className="flex items-center justify-around h-full">
           <CategoryForm />
@@ -166,7 +166,7 @@ function QuestionCard({ amount, question, answer, teams, addPoints }: QuestionCa
     <Dialog>
       <DialogTrigger asChild>
         <Card className="bg-teal-800 border-teal-800 flex items-center justify-around cursor-pointer">
-          {!answerRevealed && <CardTitle className="text-4xl text-white">${amount * 100}</CardTitle>}
+          {!answerRevealed && <CardTitle className="text-2xl md:text-4xl text-white">${amount * 100}</CardTitle>}
         </Card>
       </DialogTrigger>
       <DialogContent className="bg-teal-800 border-teal-800">
@@ -224,7 +224,7 @@ function CategoryRow({ options }: CategoryRowProps) {
     <div className="grid grid-cols-5 gap-4 pb-4">
       {options?.map((option, index) => (
         <Card key={index} className="p-3 px-4 bg-teal-800 border-teal-800 flex items-center justify-around">
-          <p className="text-white font-semibold text-lg text-center">{option?.category}</p>
+          <p className="text-white font-semibold text-md md:text-lg text-center">{option?.category}</p>
         </Card>
       ))}
     </div>
