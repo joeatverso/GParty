@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "GParty",
+  title: "Plecardy - ChatGPT powered Jeapardy like game",
   description: "A Jeapardy like game powered by ChatGPT",
 };
 
