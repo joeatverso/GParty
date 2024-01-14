@@ -61,5 +61,3 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.json({ message: message.content });
 }
-
-export const maxDuration = 120;
