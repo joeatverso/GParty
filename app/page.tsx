@@ -121,13 +121,13 @@ export default function Home() {
   }
 
   return (
-    <main className="h-screen w-screen p-24">
+    <main className="h-screen w-screen p-8 md:p-24">
       {!!questions ? (
         <div className="min-w-[700px] h-full">
           <CategoryRow options={questions} />
-          <div className="grid grid-cols-5 grid-rows-6 gap-4 w-full h-full">
+          <div className="grid grid-cols-5 grid-rows-6 gap-2 md:gap-4 w-full h-full">
             {grid}
-            <div className="flex space-x-4 pt-5">
+            <div className="flex space-x-2 md:space-x-4 pt-5">
               {teams.map((team, index) => (
                 <div key={index} className="flex space-x-1">
                   <p key={index} className="text-xl whitespace-nowrap">
@@ -169,8 +169,8 @@ function QuestionCard({ amount, question, answer, teams, addPoints }: QuestionCa
           {!answerRevealed && <CardTitle className="text-2xl md:text-4xl text-white">${amount * 100}</CardTitle>}
         </Card>
       </DialogTrigger>
-      <DialogContent className="bg-teal-800 border-teal-800">
-        <div className="p-3 px-4">
+      <DialogContent className="bg-teal-800 border-teal-800 w-full">
+        <div className="p-3 px-4 w-full overflow-x-auto">
           <p className="text-lg text-teal-200 font-semibold mb-6">For ${amount * 100}</p>
           <p className="text-2xl text-white font-semibold mb-6">{question}</p>
           <Collapsible open={answerOpen} onOpenChange={setAnswerOpen}>
@@ -221,7 +221,7 @@ interface CategoryRowProps {
 
 function CategoryRow({ options }: CategoryRowProps) {
   return (
-    <div className="grid grid-cols-5 gap-4 pb-4">
+    <div className="grid grid-cols-5 gap-2 md:gap-4 pb-4">
       {options?.map((option, index) => (
         <Card key={index} className="p-3 px-4 bg-teal-800 border-teal-800 flex items-center justify-around">
           <p className="text-white font-semibold text-md md:text-lg text-center">{option?.category}</p>
