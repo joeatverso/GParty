@@ -169,33 +169,35 @@ function QuestionCard({ amount, question, answer, teams, addPoints }: QuestionCa
           <p className="text-lg text-teal-200 font-semibold mb-6">For ${amount * 100}</p>
           <p className="text-2xl text-white font-semibold mb-6">{question}</p>
           <Collapsible open={answerOpen} onOpenChange={setAnswerOpen}>
-            <CollapsibleContent>
-              <p className="text-xl text-amber-400 font-semibold pb-3">{answer}</p>
-              <div className="flex space-x-2 mb-2">
-                {teams.map((team, index) => (
-                  <DialogClose key={index}>
-                    <Button
-                      onClick={() => {
-                        addPoints(index, amount * 100);
-                      }}
-                    >
-                      {team} + ${amount * 100}
-                    </Button>
-                  </DialogClose>
-                ))}
-              </div>
-              <div className="flex space-x-2 mb-4">
-                {teams.map((team, index) => (
-                  <DialogClose key={index}>
-                    <Button
-                      onClick={() => {
-                        addPoints(index, amount * -100);
-                      }}
-                    >
-                      {team} - ${amount * 100}
-                    </Button>
-                  </DialogClose>
-                ))}
+            <CollapsibleContent className="w-full">
+              <div>
+                <p className="text-xl text-amber-400 font-semibold pb-3">{answer}</p>
+                <div className="flex space-x-2 mb-2">
+                  {teams.map((team, index) => (
+                    <DialogClose key={index}>
+                      <Button
+                        onClick={() => {
+                          addPoints(index, amount * 100);
+                        }}
+                      >
+                        {team} + ${amount * 100}
+                      </Button>
+                    </DialogClose>
+                  ))}
+                </div>
+                <div className="flex space-x-2 mb-4">
+                  {teams.map((team, index) => (
+                    <DialogClose key={index}>
+                      <Button
+                        onClick={() => {
+                          addPoints(index, amount * -100);
+                        }}
+                      >
+                        {team} - ${amount * 100}
+                      </Button>
+                    </DialogClose>
+                  ))}
+                </div>
               </div>
             </CollapsibleContent>
             <CollapsibleTrigger>
