@@ -91,7 +91,7 @@ export default function Home() {
             </div>
           ))}
         </div>
-        <div className="flex md:justify-between pt-3 space-x-2">
+        <div className="flex md:justify-between pt-5 space-x-2">
           <Button disabled={loadingQuestions} onClick={() => addTeam()}>
             Add Team
           </Button>
