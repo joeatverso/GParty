@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
       },
     ],
     response_format: { type: "json_object" },
-    temperature: 1.3,
+    temperature: 0.9,
   });
 
   const {
