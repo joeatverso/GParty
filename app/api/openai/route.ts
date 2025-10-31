@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
   const { categories } = await req.json();
 
   const response = await openai.chat.completions.create({
-    model: "gpt-3.5-turbo-1106",
+    model: "gpt-5",
     messages: [
       {
         role: "system",
