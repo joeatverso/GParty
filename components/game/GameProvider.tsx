@@ -20,6 +20,24 @@ type GameContextValue = {
 
 const GameContext = createContext<GameContextValue | null>(null);
 
+async function fetchPart<T>(
+  part: "jeopardy" | "double" | "final",
+  theme: string,
+  teams: Team[],
+): Promise<T> {
+  const res = await fetch("/api/openai", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ theme, teams: teams.map((t) => t.name), part }),
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(text || `Request failed (${res.status})`);
+  }
+  const json = (await res.json()) as { message: string };
+  return JSON.parse(json.message) as T;
+}
+
 export function GameProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -28,17 +46,16 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       dispatch({ type: "SET_TEAMS", teams });
       dispatch({ type: "START_GENERATING" });
       try {
-        const res = await fetch("/api/openai", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ theme, teams: teams.map((t) => t.name) }),
-        });
-        if (!res.ok) {
-          const text = await res.text();
-          throw new Error(text || `Request failed (${res.status})`);
-        }
-        const json = (await res.json()) as { message: string };
-        const raw: RawRoundData = JSON.parse(json.message);
+        const [jeopardy, double, final] = await Promise.all([
+          fetchPart<Pick<RawRoundData, "jeopardy">>("jeopardy", theme, teams),
+          fetchPart<Pick<RawRoundData, "double">>("double", theme, teams),
+          fetchPart<Pick<RawRoundData, "final">>("final", theme, teams),
+        ]);
+        const raw: RawRoundData = {
+          jeopardy: jeopardy.jeopardy,
+          double: double.double,
+          final: final.final,
+        };
         const data = buildRoundData(raw);
         dispatch({ type: "LOAD_GAME", data });
       } catch (err) {
