@@ -3,8 +3,8 @@
 import { Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import type { Team } from "@/lib/game/types";
 
 import { useGame } from "./GameProvider";
