@@ -56,7 +56,7 @@ export function Setup() {
     <div className="board-gradient flex h-full w-full items-center justify-center overflow-y-auto px-4 py-10">
       <div className="w-full max-w-2xl rounded-xl border border-jeopardy-gold/40 bg-jeopardy-blue-darker/80 p-8 shadow-2xl backdrop-blur">
         <h1 className="font-display text-5xl tracking-wider text-jeopardy-gold-bright text-letterpress sm:text-6xl">
-          Jeopardy (by Joe)
+          GParty
         </h1>
         <p className="mt-2 text-sm uppercase tracking-[0.3em] text-jeopardy-cream/80">
           AI-powered Jeopardy

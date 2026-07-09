@@ -29,7 +29,7 @@ export function Board() {
 
   return (
     <div className="flex h-full w-full flex-col gap-2 bg-neutral-800 p-3 sm:p-4">
-      <div className="grid h-full grid-cols-6 gap-2 sm:gap-3">
+      <div className="grid h-full grid-cols-6 grid-rows-[auto_repeat(5,minmax(0,1fr))] gap-2 sm:gap-3">
         {cats.map((cat, ci) => (
           <div
             key={`${ci}-${cat.name}`}
