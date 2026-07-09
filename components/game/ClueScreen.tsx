@@ -42,7 +42,7 @@ export function ClueScreen() {
   const progress = Math.max(0, Math.min(1, timer / READING_SECONDS));
 
   return (
-    <div className="board-gradient relative flex h-full w-full flex-col">
+    <div className="relative flex h-full w-full flex-col bg-black">
       <div
         className={
           "relative flex flex-1 flex-col items-center justify-center px-6 py-8 text-center" +
@@ -65,13 +65,13 @@ export function ClueScreen() {
       >
         <div className="animate-clue-zoom max-w-5xl">
           <p
-            className="font-display uppercase text-clue-text text-clue-shadow"
+            className="font-display uppercase text-clue-text"
             style={{
               fontSize:
                 phase === "reading"
                   ? "clamp(1.75rem, 5.5vw, 5rem)"
                   : "clamp(1.25rem, 3.5vw, 3rem)",
-              lineHeight: 1.05,
+              lineHeight: 1.3,
             }}
           >
             {clue.question}
@@ -83,7 +83,7 @@ export function ClueScreen() {
                 Answer
               </div>
               <p
-                className="font-display mt-2 uppercase text-jeopardy-gold-bright text-clue-shadow"
+                className="font-display mt-2 uppercase text-jeopardy-gold-bright"
                 style={{
                   fontSize: "clamp(2rem, 7vw, 6rem)",
                   lineHeight: 1.05,
@@ -106,7 +106,7 @@ export function ClueScreen() {
       </div>
 
       {phase === "scoring" ? (
-        <div className="animate-fade-in border-y border-black/40 bg-jeopardy-blue-deep/95 px-3 py-2 sm:px-4">
+        <div className="animate-fade-in border-y border-black/40 bg-neutral-800/95 px-3 py-2 sm:px-4">
           <div className="flex flex-wrap items-center justify-center gap-2">
             <span className="mr-2 font-display text-xs uppercase tracking-widest text-jeopardy-cream/70 sm:text-sm">
               Who got it?

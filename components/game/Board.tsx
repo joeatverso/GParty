@@ -28,14 +28,14 @@ export function Board() {
     state.round === "jeopardy" ? state.data.jeopardy : state.data.double;
 
   return (
-    <div className="board-gradient flex h-full w-full flex-col gap-2 p-3 sm:p-4">
+    <div className="flex h-full w-full flex-col gap-2 bg-neutral-800 p-3 sm:p-4">
       <div className="grid h-full grid-cols-6 gap-2 sm:gap-3">
         {cats.map((cat, ci) => (
           <div
             key={`${ci}-${cat.name}`}
-            className="cell-gradient flex items-center justify-center rounded-sm border-2 border-black p-1 text-center sm:p-2"
+            className="flex items-center justify-center rounded-sm border-2 border-black bg-neutral-950 p-1 text-center sm:p-2"
           >
-            <span className="font-display text-base uppercase leading-tight text-clue-text text-letterpress sm:text-xl md:text-2xl lg:text-3xl">
+            <span className="font-display text-base uppercase leading-tight text-clue-text sm:text-xl md:text-2xl lg:text-3xl">
               {cat.name}
             </span>
           </div>
@@ -52,8 +52,8 @@ export function Board() {
               pending.clueIdx === ri;
 
             const baseClass = played
-              ? "rounded-sm border-2 border-black bg-jeopardy-blue-darker"
-              : "cell-gradient rounded-sm border-2 border-black transition hover:brightness-125 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jeopardy-gold-bright";
+              ? "rounded-sm border-2 border-black bg-neutral-900"
+              : "rounded-sm border-2 border-black bg-neutral-950 transition hover:brightness-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600";
             const highlightClass = isPending
               ? " animate-clue-highlight relative z-10"
               : "";
@@ -76,7 +76,7 @@ export function Board() {
               >
                 {!played ? (
                   <span
-                    className="font-display block text-jeopardy-gold-bright text-clue-shadow"
+                    className="font-display block text-white"
                     style={{ fontSize: "clamp(1.5rem, 4vw, 4rem)" }}
                   >
                     {formatValue(clue.value)}
