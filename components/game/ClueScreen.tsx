@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 
 import { useGame } from "./GameProvider";
 
-const READING_SECONDS = 10;
 const ANSWER_SECONDS = 5;
 
 export function ClueScreen() {
@@ -14,14 +13,15 @@ export function ClueScreen() {
   const isViewer = role === "viewer";
   const phase = state.cluePhase;
   const canSkip = phase === "reading" && !isViewer;
+  const clueSeconds = state.clueSeconds;
   // Countdown stays device-local; it resets with the clue so host and viewers stay in sync
-  const [timer, setTimer] = useState(READING_SECONDS);
+  const [timer, setTimer] = useState(clueSeconds);
   const [answerTimer, setAnswerTimer] = useState(ANSWER_SECONDS);
 
   useEffect(() => {
-    setTimer(READING_SECONDS);
+    setTimer(clueSeconds);
     setAnswerTimer(ANSWER_SECONDS);
-  }, [state.selected?.categoryIdx, state.selected?.clueIdx, state.round]);
+  }, [state.selected?.categoryIdx, state.selected?.clueIdx, state.round, clueSeconds]);
 
   useEffect(() => {
     if (phase !== "reading") return;
@@ -52,7 +52,7 @@ export function ClueScreen() {
 
   const isDailyDouble = clue.isDailyDouble;
   const value = isDailyDouble ? state.ddWager : clue.value;
-  const duration = phase === "reading" ? READING_SECONDS : ANSWER_SECONDS;
+  const duration = phase === "reading" ? clueSeconds : ANSWER_SECONDS;
   const remaining = phase === "reading" ? timer : answerTimer;
   const progress = Math.max(0, Math.min(1, remaining / duration));
 

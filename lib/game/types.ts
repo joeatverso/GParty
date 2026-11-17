@@ -78,6 +78,7 @@ export type GameState = {
   finalAnswers: Record<string, FinalAnswer>;
   finalTimer: number;
   finalTimerRunning: boolean;
+  clueSeconds: number;
   loadingError: string | null;
 };
 

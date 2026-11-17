@@ -24,6 +24,7 @@ type GameContextValue = {
   generate: (
     topics: { jeopardy: string; double: string },
     teams: Team[],
+    clueSeconds: number,
   ) => Promise<void>;
   role: SessionRole | null;
   sessionCode: string | null;
@@ -75,10 +76,15 @@ function GameProviderInner({
   );
 
   const generate = useCallback(
-    async (topics: { jeopardy: string; double: string }, teams: Team[]) => {
+    async (
+      topics: { jeopardy: string; double: string },
+      teams: Team[],
+      clueSeconds: number,
+    ) => {
       // Best-effort session start; solo play continues if realtime is unavailable
       void startHosting();
       dispatch({ type: "SET_TEAMS", teams });
+      dispatch({ type: "SET_CLUE_SECONDS", seconds: clueSeconds });
       dispatch({ type: "START_GENERATING" });
       try {
         const [jeopardy, double, final] = await Promise.all([

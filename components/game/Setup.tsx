@@ -1,14 +1,99 @@
 "use client";
 
-import { Plus, Sparkles, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { Plus, Settings, Sparkles, Trash2, X } from "lucide-react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  DEFAULT_CLUE_SECONDS,
+  MAX_CLUE_SECONDS,
+  MIN_CLUE_SECONDS,
+} from "@/lib/game/reducer";
 import type { Team } from "@/lib/game/types";
 
 import { useGame } from "./GameProvider";
 import { GraphPaperBackground } from "./GraphPaperBackground";
+
+function SettingsModal({
+  clueSeconds,
+  onClueSeconds,
+  onClose,
+}: {
+  clueSeconds: number;
+  onClueSeconds: (seconds: number) => void;
+  onClose: () => void;
+}) {
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") onClose();
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4"
+      onClick={onClose}
+    >
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="settings-title"
+        tabIndex={-1}
+        className="w-full max-w-md border border-jeopardy-gold/40 bg-jeopardy-blue-darker p-6 shadow-2xl outline-none"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between gap-4">
+          <h2
+            id="settings-title"
+            className="font-display text-2xl uppercase tracking-widest text-jeopardy-gold-bright"
+          >
+            Settings
+          </h2>
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-md p-2 text-white/60 hover:bg-white/10 hover:text-white"
+            aria-label="Close settings"
+            autoFocus
+          >
+            <X className="size-5" />
+          </button>
+        </div>
+
+        <div className="mt-8">
+          <div className="flex items-center justify-between">
+            <label
+              htmlFor="clue-seconds"
+              className="font-display text-sm uppercase tracking-widest text-jeopardy-cream"
+            >
+              Time per question
+            </label>
+            <span className="font-display text-jeopardy-gold-bright">
+              {clueSeconds}s
+            </span>
+          </div>
+          <input
+            id="clue-seconds"
+            type="range"
+            min={MIN_CLUE_SECONDS}
+            max={MAX_CLUE_SECONDS}
+            step={1}
+            value={clueSeconds}
+            onChange={(e) => onClueSeconds(Number(e.target.value))}
+            className="mt-3 w-full accent-jeopardy-gold-bright"
+            aria-valuetext={`${clueSeconds} seconds`}
+          />
+          <p className="mt-2 text-xs text-white/50">
+            How long each clue stays on screen before the answer.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function makeTeam(name: string): Team {
   return {
@@ -26,6 +111,9 @@ export function Setup() {
     useGame();
   const [jeopardyTopic, setJeopardyTopic] = useState("");
   const [doubleTopic, setDoubleTopic] = useState("");
+  const [clueSeconds, setClueSeconds] = useState(
+    state.clueSeconds || DEFAULT_CLUE_SECONDS,
+  );
   const [teams, setTeams] = useState<Team[]>(() => [
     makeTeam("Team 1"),
     makeTeam("Team 2"),
@@ -34,6 +122,7 @@ export function Setup() {
   const [joining, setJoining] = useState(false);
   const [suggesting, setSuggesting] = useState(false);
   const [suggestError, setSuggestError] = useState<string | null>(null);
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   const canStart =
     jeopardyTopic.trim().length > 1 &&
@@ -91,6 +180,7 @@ export function Setup() {
     void generate(
       { jeopardy: jeopardyTopic.trim(), double: doubleTopic.trim() },
       teams.map((t) => ({ ...t, name: t.name.trim() })),
+      clueSeconds,
     );
   }
 
@@ -105,7 +195,8 @@ export function Setup() {
   return (
     <div className="graph-paper relative h-full w-full">
       <GraphPaperBackground />
-      <div className="absolute inset-0 flex items-center justify-center overflow-y-auto px-4 py-10">
+      <div className="absolute inset-0 overflow-y-auto px-4 py-10">
+      <div className="flex min-h-full items-center justify-center">
       <div className="w-full max-w-2xl rounded-none border border-jeopardy-gold/40 bg-jeopardy-blue-darker/80 p-8 shadow-2xl backdrop-blur">
         <div className="flex items-start justify-between gap-4">
           <h1 className="font-display text-5xl tracking-wider text-jeopardy-gold-bright sm:text-6xl">
@@ -208,7 +299,15 @@ export function Setup() {
           </ul>
         </div>
 
-        <div className="mt-10 flex items-center justify-end gap-3">
+        <div className="mt-10 flex items-center justify-between gap-3">
+          <button
+            type="button"
+            onClick={() => setSettingsOpen(true)}
+            className="rounded-md p-2 text-neutral-300 hover:bg-white/10 hover:text-white"
+            aria-label="Settings"
+          >
+            <Settings className="size-5" />
+          </button>
           <Button onClick={start} disabled={!canStart} size="lg">
             Generate Game
           </Button>
@@ -245,6 +344,14 @@ export function Setup() {
         ) : null}
       </div>
       </div>
+      </div>
+      {settingsOpen ? (
+        <SettingsModal
+          clueSeconds={clueSeconds}
+          onClueSeconds={setClueSeconds}
+          onClose={() => setSettingsOpen(false)}
+        />
+      ) : null}
     </div>
   );
 }

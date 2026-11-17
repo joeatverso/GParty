@@ -39,9 +39,13 @@ export type Action =
   | { type: "FINAL_TIMER_RESET" }
   | { type: "FINAL_TIMER_TICK" }
   | { type: "END_GAME" }
+  | { type: "SET_CLUE_SECONDS"; seconds: number }
   | { type: "RESET" };
 
 export const FINAL_TIMER_SECONDS = 30;
+export const DEFAULT_CLUE_SECONDS = 10;
+export const MIN_CLUE_SECONDS = 5;
+export const MAX_CLUE_SECONDS = 15;
 
 export const initialState: GameState = {
   screen: "setup",
@@ -59,6 +63,7 @@ export const initialState: GameState = {
   finalAnswers: {},
   finalTimer: FINAL_TIMER_SECONDS,
   finalTimerRunning: false,
+  clueSeconds: DEFAULT_CLUE_SECONDS,
   loadingError: null,
 };
 
@@ -402,10 +407,20 @@ export function reducer(state: GameState, action: Action): GameState {
     case "END_GAME":
       return { ...state, screen: "winner" };
 
+    case "SET_CLUE_SECONDS":
+      return {
+        ...state,
+        clueSeconds: Math.max(
+          MIN_CLUE_SECONDS,
+          Math.min(MAX_CLUE_SECONDS, Math.round(action.seconds)),
+        ),
+      };
+
     case "RESET":
       return {
         ...initialState,
         teams: state.teams.map((t) => ({ ...t, score: 0 })),
+        clueSeconds: state.clueSeconds,
         loadingError: state.loadingError,
       };
 
