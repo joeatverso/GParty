@@ -1,14 +1,14 @@
 @import "tailwindcss";
 
 @theme {
-  --color-jeopardy-blue: #060CE9;
-  --color-jeopardy-blue-deep: #0410B0;
-  --color-jeopardy-blue-darker: #02063D;
-  --color-jeopardy-gold: #D69F4C;
-  --color-jeopardy-gold-bright: #FFCC00;
+  --color-jeopardy-blue: #5a5a5a;
+  --color-jeopardy-blue-deep: #484848;
+  --color-jeopardy-blue-darker: #333333;
+  --color-jeopardy-gold: #3ad9a0;
+  --color-jeopardy-gold-bright: #4dffbc;
   --color-jeopardy-cream: #F4E4BC;
   --color-clue-text: #FFFFFF;
-  --color-played: #02063D;
+  --color-played: #333333;
 
   --font-display: "Oswald", "Bebas Neue", system-ui, sans-serif;
   --font-body: "Inter", system-ui, sans-serif;
@@ -47,11 +47,15 @@
   }
 
   .board-gradient {
-    background: linear-gradient(180deg, #060db8 0%, #040aa0 35%, #020670 100%);
+    background: linear-gradient(180deg, #5a5a5a 0%, #4a4a4a 35%, #3a3a3a 100%);
   }
 
   .cell-gradient {
-    background: linear-gradient(180deg, #070ed1 0%, #050bbf 50%, #04099e 100%);
+    background: linear-gradient(180deg, #666666 0%, #5a5a5a 50%, #4c4c4c 100%);
+  }
+
+  .graph-paper {
+    background-color: #2a2a2d;
   }
 }
 

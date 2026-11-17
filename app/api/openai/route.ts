@@ -49,7 +49,7 @@ Output shape:
 }`,
   double: `${sharedRules}
 
-Generate a "Double Jeopardy" round: 6 categories, each with 5 clues (values 400, 800, 1200, 1600, 2000), in increasing difficulty. The 6 category names must all be unique. Pick deeper, more advanced, or more niche category angles than a typical first-round board would use, so these categories are unlikely to duplicate a first round on the same theme.
+Generate a "Double Jeopardy" round: 6 categories, each with 5 clues (values 400, 800, 1200, 1600, 2000), in increasing difficulty. The 6 category names must all be unique. Pick deeper, more advanced, or more niche category angles than a typical first-round board would use.
 
 Output shape:
 
@@ -67,7 +67,7 @@ Output shape:
 }`,
   final: `${sharedRules}
 
-Generate a single "Final Jeopardy" clue: one category, one challenging clue, one factual answer. It should be hard but fair, and follows the same no-overlap rule above.
+Generate a single "Final Jeopardy" clue: one category, one challenging clue, one factual answer. It should be hard but fair, and follows the same no-overlap rule above. If the THEME contains two topics joined by "+", the clue must connect or blend both topics.
 
 Output shape:
 
@@ -86,13 +86,68 @@ function isPart(value: unknown): value is Part {
   return typeof value === "string" && value in partPrompts;
 }
 
+const suggestPrompt = `You suggest trivia topics for a Jeopardy-style party game. Output ONLY valid JSON, no commentary, no markdown fences.
+
+Return exactly:
+{ "jeopardy": "<topic>", "double": "<topic>" }
+
+RULES:
+- Each topic is 2 to 5 words, broad and fun, something a group of friends could play.
+- The two topics must be unrelated to each other.
+- "double" should be a bit more advanced or niche than "jeopardy".
+- Do not repeat or closely rephrase any topic in the user's "avoid" list.
+- Vary the subjects widely: history, science, pop culture, geography, sports, food, language, and so on.`;
+
 export async function POST(req: NextRequest) {
   try {
-    const { theme, teams, part } = (await req.json()) as {
+    const { theme, teams, part, avoid } = (await req.json()) as {
       theme?: string;
       teams?: string[];
       part?: string;
+      avoid?: string[];
     };
+
+    if (part === "suggest") {
+      const avoidList = Array.isArray(avoid)
+        ? avoid.filter((t) => typeof t === "string" && t.trim().length > 0)
+        : [];
+      const response = await getClient().chat.completions.create({
+        model: "gpt-5-mini",
+        messages: [
+          { role: "system", content: suggestPrompt },
+          {
+            role: "user",
+            content: JSON.stringify({
+              avoid: avoidList,
+              seed: Math.random().toString(36).slice(2),
+            }),
+          },
+        ],
+        response_format: { type: "json_object" },
+      });
+      const content = response.choices[0]?.message?.content ?? null;
+      let parsed: { jeopardy?: unknown; double?: unknown } = {};
+      try {
+        parsed = content ? JSON.parse(content) : {};
+      } catch {
+        parsed = {};
+      }
+      if (
+        typeof parsed.jeopardy !== "string" ||
+        typeof parsed.double !== "string" ||
+        !parsed.jeopardy.trim() ||
+        !parsed.double.trim()
+      ) {
+        return NextResponse.json(
+          { error: "Model returned topics in an unexpected shape." },
+          { status: 502 },
+        );
+      }
+      return NextResponse.json({
+        jeopardy: parsed.jeopardy.trim(),
+        double: parsed.double.trim(),
+      });
+    }
 
     if (!theme || typeof theme !== "string") {
       return NextResponse.json(

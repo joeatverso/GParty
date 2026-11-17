@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { useGame } from "./GameProvider";
+import { GraphPaperBackground } from "./GraphPaperBackground";
 
 const STATUS_LINES = [
   "Briefing the host…",
@@ -68,7 +69,8 @@ export function Generating() {
   const teamCount = state.teams.length;
 
   return (
-    <div className="board-gradient relative flex h-full w-full flex-col items-center justify-center gap-6 overflow-hidden px-6 py-8 text-center">
+    <div className="graph-paper relative flex h-full w-full flex-col items-center justify-center gap-6 overflow-hidden px-6 py-8 text-center">
+      <GraphPaperBackground />
       <div
         className="pointer-events-none absolute left-1/2 top-1/2 size-[120vmin] rounded-full bg-jeopardy-gold-bright/10 blur-3xl animate-spotlight"
       />
@@ -96,8 +98,8 @@ export function Generating() {
               key={i}
               className={
                 filled
-                  ? "cell-gradient animate-tile-fill aspect-[4/3] rounded-sm border border-black/60 flex items-center justify-center"
-                  : "aspect-[4/3] rounded-sm border border-black/60 bg-jeopardy-blue-darker/70"
+                  ? "cell-gradient animate-tile-fill aspect-[4/3] rounded-none border border-black/60 flex items-center justify-center"
+                  : "aspect-[4/3] rounded-none border border-black/60 bg-jeopardy-blue-darker/70"
               }
             >
               {filled ? (
@@ -142,7 +144,7 @@ export function Generating() {
         {[0, 1, 2, 3, 4, 5, 6].map((i) => (
           <span
             key={i}
-            className="animate-eq-bar block h-full w-2 rounded-sm bg-jeopardy-gold-bright sm:w-2.5"
+            className="animate-eq-bar block h-full w-2 rounded-none bg-jeopardy-gold-bright sm:w-2.5"
             style={{
               animationDelay: `${(i % 4) * 0.12 + (i > 3 ? 0.06 : 0)}s`,
               animationDuration: `${0.7 + (i % 3) * 0.15}s`,
@@ -156,7 +158,7 @@ export function Generating() {
           {state.teams.map((t, i) => (
             <span
               key={t.id}
-              className="animate-float-up rounded-sm border border-jeopardy-gold/50 bg-jeopardy-blue-deep/60 px-3 py-1 font-display text-xs uppercase tracking-widest text-jeopardy-cream sm:text-sm"
+              className="animate-float-up rounded-none border border-jeopardy-gold/50 bg-jeopardy-blue-deep/60 px-3 py-1 font-display text-xs uppercase tracking-widest text-jeopardy-cream sm:text-sm"
               style={{ animationDelay: `${i * 80}ms` }}
             >
               {t.name}

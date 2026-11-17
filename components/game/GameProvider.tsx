@@ -21,7 +21,10 @@ import {
 type GameContextValue = {
   state: GameState;
   dispatch: React.Dispatch<Action>;
-  generate: (theme: string, teams: Team[]) => Promise<void>;
+  generate: (
+    topics: { jeopardy: string; double: string },
+    teams: Team[],
+  ) => Promise<void>;
   role: SessionRole | null;
   sessionCode: string | null;
   viewerCount: number;
@@ -72,16 +75,24 @@ function GameProviderInner({
   );
 
   const generate = useCallback(
-    async (theme: string, teams: Team[]) => {
+    async (topics: { jeopardy: string; double: string }, teams: Team[]) => {
       // Best-effort session start; solo play continues if realtime is unavailable
       void startHosting();
       dispatch({ type: "SET_TEAMS", teams });
       dispatch({ type: "START_GENERATING" });
       try {
         const [jeopardy, double, final] = await Promise.all([
-          fetchPart<Pick<RawRoundData, "jeopardy">>("jeopardy", theme, teams),
-          fetchPart<Pick<RawRoundData, "double">>("double", theme, teams),
-          fetchPart<Pick<RawRoundData, "final">>("final", theme, teams),
+          fetchPart<Pick<RawRoundData, "jeopardy">>(
+            "jeopardy",
+            topics.jeopardy,
+            teams,
+          ),
+          fetchPart<Pick<RawRoundData, "double">>("double", topics.double, teams),
+          fetchPart<Pick<RawRoundData, "final">>(
+            "final",
+            `${topics.jeopardy} + ${topics.double}`,
+            teams,
+          ),
         ]);
         const raw: RawRoundData = {
           jeopardy: jeopardy.jeopardy,
