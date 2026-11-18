@@ -79,6 +79,7 @@ export type GameState = {
   finalTimer: number;
   finalTimerRunning: boolean;
   clueSeconds: number;
+  autoSelectClue: boolean;
   loadingError: string | null;
 };
 

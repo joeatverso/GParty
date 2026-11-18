@@ -25,6 +25,7 @@ type GameContextValue = {
     topics: { jeopardy: string; double: string },
     teams: Team[],
     clueSeconds: number,
+    autoSelectClue: boolean,
   ) => Promise<void>;
   role: SessionRole | null;
   sessionCode: string | null;
@@ -80,11 +81,13 @@ function GameProviderInner({
       topics: { jeopardy: string; double: string },
       teams: Team[],
       clueSeconds: number,
+      autoSelectClue: boolean,
     ) => {
       // Best-effort session start; solo play continues if realtime is unavailable
       void startHosting();
       dispatch({ type: "SET_TEAMS", teams });
       dispatch({ type: "SET_CLUE_SECONDS", seconds: clueSeconds });
+      dispatch({ type: "SET_AUTO_SELECT", enabled: autoSelectClue });
       dispatch({ type: "START_GENERATING" });
       try {
         const [jeopardy, double, final] = await Promise.all([

@@ -40,6 +40,7 @@ export type Action =
   | { type: "FINAL_TIMER_TICK" }
   | { type: "END_GAME" }
   | { type: "SET_CLUE_SECONDS"; seconds: number }
+  | { type: "SET_AUTO_SELECT"; enabled: boolean }
   | { type: "RESET" };
 
 export const FINAL_TIMER_SECONDS = 30;
@@ -64,6 +65,7 @@ export const initialState: GameState = {
   finalTimer: FINAL_TIMER_SECONDS,
   finalTimerRunning: false,
   clueSeconds: DEFAULT_CLUE_SECONDS,
+  autoSelectClue: true,
   loadingError: null,
 };
 
@@ -295,7 +297,7 @@ export function reducer(state: GameState, action: Action): GameState {
           ddPhase: "splash",
         };
       }
-      const upcoming = pickRandomUnplayed(next);
+      const upcoming = state.autoSelectClue ? pickRandomUnplayed(next) : null;
       return {
         ...next,
         screen: "board",
@@ -416,11 +418,15 @@ export function reducer(state: GameState, action: Action): GameState {
         ),
       };
 
+    case "SET_AUTO_SELECT":
+      return { ...state, autoSelectClue: action.enabled };
+
     case "RESET":
       return {
         ...initialState,
         teams: state.teams.map((t) => ({ ...t, score: 0 })),
         clueSeconds: state.clueSeconds,
+        autoSelectClue: state.autoSelectClue,
         loadingError: state.loadingError,
       };
 

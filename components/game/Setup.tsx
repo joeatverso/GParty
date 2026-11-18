@@ -18,10 +18,14 @@ import { GraphPaperBackground } from "./GraphPaperBackground";
 function SettingsModal({
   clueSeconds,
   onClueSeconds,
+  autoSelectClue,
+  onAutoSelectClue,
   onClose,
 }: {
   clueSeconds: number;
   onClueSeconds: (seconds: number) => void;
+  autoSelectClue: boolean;
+  onAutoSelectClue: (enabled: boolean) => void;
   onClose: () => void;
 }) {
   useEffect(() => {
@@ -90,6 +94,28 @@ function SettingsModal({
             How long each clue stays on screen before the answer.
           </p>
         </div>
+
+        <div className="mt-8">
+          <div className="flex items-center justify-between">
+            <label
+              htmlFor="auto-select-clue"
+              className="font-display text-sm uppercase tracking-widest text-jeopardy-cream"
+            >
+              Auto-select next question
+            </label>
+            <input
+              id="auto-select-clue"
+              type="checkbox"
+              checked={autoSelectClue}
+              onChange={(e) => onAutoSelectClue(e.target.checked)}
+              className="size-5 accent-jeopardy-gold-bright"
+            />
+          </div>
+          <p className="mt-2 text-xs text-white/50">
+            When off, the host picks each clue on the board before the timer
+            starts.
+          </p>
+        </div>
       </div>
     </div>
   );
@@ -113,6 +139,9 @@ export function Setup() {
   const [doubleTopic, setDoubleTopic] = useState("");
   const [clueSeconds, setClueSeconds] = useState(
     state.clueSeconds || DEFAULT_CLUE_SECONDS,
+  );
+  const [autoSelectClue, setAutoSelectClue] = useState(
+    state.autoSelectClue ?? true,
   );
   const [teams, setTeams] = useState<Team[]>(() => [
     makeTeam("Team 1"),
@@ -181,6 +210,7 @@ export function Setup() {
       { jeopardy: jeopardyTopic.trim(), double: doubleTopic.trim() },
       teams.map((t) => ({ ...t, name: t.name.trim() })),
       clueSeconds,
+      autoSelectClue,
     );
   }
 
@@ -349,6 +379,8 @@ export function Setup() {
         <SettingsModal
           clueSeconds={clueSeconds}
           onClueSeconds={setClueSeconds}
+          autoSelectClue={autoSelectClue}
+          onAutoSelectClue={setAutoSelectClue}
           onClose={() => setSettingsOpen(false)}
         />
       ) : null}
